@@ -6,6 +6,7 @@ namespace zigzag {
 		Point* _head;
 		int _number;
 		mutable double _lenghtCache;
+		void resetCache()const;
 	public:
 		Polyline();
 		Polyline(int num);
@@ -16,8 +17,7 @@ namespace zigzag {
 		Polyline& operator=(Polyline&& tLine)noexcept;
 
 		double getCache()const;
-		int getNumber()const;
-		void resetCache()const;
+		int getNumber()const;	
 		Point& operator[](int ind);
 		const Point& operator[](int ind)const;
 		void insertByIndex(int ind, const Point& point);
