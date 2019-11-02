@@ -28,14 +28,12 @@ namespace  zigzag{
 	}
 	Polyline& Polyline::operator =(const Polyline& line) {
 		extern bool trace;
-		Point* headRes = new Point[line._number];
+		delete[] _head;
+		_head = new Point[line._number];
 		_number = line._number;
 		for (int i = 0; i < line._number; ++i) {
-			headRes[i] = line._head[i];
+			_head[i] = line[i];
 		}
-		delete[] _head;
-		_head = headRes;
-		_number = line._number;
 		_lenghtCache = line._lenghtCache;
 		if (trace) std::cout << "\tОператор присваивания копированием\n";
 		return *this;
@@ -68,9 +66,7 @@ namespace  zigzag{
 	double Polyline::getCache()const {
 		return _lenghtCache;
 	} 
-	void Polyline::resetCache()const {
-		_lenghtCache = -1;
-	}
+	
 	int Polyline::getNumber()const {
 		return _number;
 	}
@@ -83,14 +79,22 @@ namespace  zigzag{
 		return _head[ind];
 	}
 	void Polyline::insertByIndex(const int ind, const Point& point){
-		if (ind < 0 || ind >=_number) throw"Ошибка вставки, укажите верный индекс либо убедитесь,что указатель не нулевой";
-		Polyline lineRes(getNumber() + 1);
-		for (int i = 0; i < ind; ++i) {
-			lineRes._head[i] = _head[i];
+		if (ind < 0 || ind >_number+1) throw"Ошибка вставки, укажите верный индекс либо убедитесь,что указатель не нулевой";
+		Polyline lineRes(_number + 1);
+		if (ind == _number) {
+			for (int i = 0; i < _number; ++i) {
+				lineRes._head[i] = _head[i];
+			}
+			lineRes[_number] = point;
 		}
-		lineRes._head[ind] = point;
-		for (int i = ind + 1; i < lineRes.getNumber(); ++i) {
-			lineRes._head[i] = _head[i - 1];
+		else {
+			for (int i = 0; i < ind; ++i) {
+				lineRes._head[i] = _head[i];
+			}
+			lineRes._head[ind] = point;
+			for (int i = ind + 1; i < lineRes.getNumber(); ++i) {
+				lineRes._head[i] = _head[i - 1];
+			}
 		}
 		resetCache();
 		*this = lineRes;
@@ -142,25 +146,14 @@ namespace  zigzag{
 		return(!(line1 == line2));
 	}
 	Polyline& operator+=( Polyline& line1, const Polyline& line2) {
-		 Polyline lineRes(line1.getNumber() + line2.getNumber());
-		 for (int i = 0; i < line1.getNumber(); ++i) {
-			 lineRes[i] = line1[i];
-		 }
-		 for (int i = 0; i < line2.getNumber(); ++i) {
-			 lineRes[i + line1.getNumber()] = line2[i];
-		 }
-		 line1 = lineRes;
-		 line1.resetCache();
+		const auto num = line1.getNumber();
+		for (int i = 0; i < line2.getNumber(); ++i) {
+			line1.insertByIndex(i+ num, line2[i]);
+		}
 		 return line1;
 	}
 	Polyline& operator+=(Polyline& line, const Point& point) {
-		Polyline lineRes(line.getNumber() + 1);
-		for (int i = 0; i < lineRes.getNumber() - 1; ++i) {
-			lineRes[i] = line[i];
-		}
-		lineRes[line.getNumber()] = point;
-		line = lineRes;
-		line.resetCache();
+		line.insertByIndex(line.getNumber(),point);
 		return line;
 	}
 	Polyline operator+(const Polyline& line1,const Polyline& line2) {
@@ -173,13 +166,7 @@ namespace  zigzag{
 		return line;
 	}
 	Polyline operator+(const Point& point, Polyline& line) {
-		Polyline lineRes(line.getNumber() + 1);
-		lineRes[0] = point;
-		for (int i = 1; i < lineRes.getNumber(); ++i) {
-			lineRes[i] = line[i - 1];
-		}
-		lineRes.resetCache();
-		line = lineRes;
+		line.insertByIndex(0, point);
 		return line;
 	}
 }
