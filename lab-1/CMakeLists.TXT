@@ -1,0 +1,3 @@
+cmake_minimum_required(VERSION 3.5)
+add_executable(lab-1 main.cpp cpp-Lines.cpp cpp-Lines.h c-Lines.cpp c-Lines.h point.cpp point.h )
+target_link_libraries(lab-1 utils)

@@ -1,0 +1,2 @@
+C:/Users/79376/Desktop/лаб/lab-1-encapsulation/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+C:/Users/79376/Desktop/лаб/lab-1-encapsulation/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
