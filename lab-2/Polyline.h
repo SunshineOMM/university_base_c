@@ -6,9 +6,8 @@ namespace zigzag {
 		Point* _head;
 		int _number;
 		mutable double _lenghtCache;
-		void Polyline::resetCache()const {
-			_lenghtCache = -1;
-		}
+		void Polyline::resetCache()const;
+		
 	public:
 		Polyline();
 		Polyline(int num);

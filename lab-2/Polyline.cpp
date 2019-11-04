@@ -63,6 +63,9 @@ namespace  zigzag{
 		return *this;
 	}
 	
+	void Polyline::resetCache()const {
+		_lenghtCache = -1;
+	}
 	double Polyline::getCache()const {
 		return _lenghtCache;
 	} 
