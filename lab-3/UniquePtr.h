@@ -8,7 +8,7 @@ public:
 	UniquePtr& operator =(const UniquePtr& ptr) = delete;
 	~UniquePtr() {
 		delete _ptr;
-		*this = nullptr;
+		//this = nullptr;
 	}
 	UniquePtr(UniquePtr&& uptr)noexcept {
 		_ptr = uptr._ptr;
@@ -33,38 +33,37 @@ public:
 		return res;
 	}
 	void reset(T* ptr=nullptr) {
-		T* old = _ptr;
-		_ptr = ptr;
-		if (old != nullptr) {
+		if (_ptr != nullptr) {
 			delete _ptr;
 		}
+		_ptr = ptr;
 	}
 	void swap(UniquePtr& uptr) {
 		T* bailer = _ptr;
 		_ptr = uptr._ptr;
 		uptr._ptr = bailer;
 	}
-	T* get() {
+	T* get()const {
 		return _ptr;
 	}
 	operator bool() {
 		if (_ptr) return true;
 		else return false;
-
 	}
 	T& operator*() {
-		return _ptr;// убрал *
+		return *_ptr;
 	}
 	T& operator->() {
 		return _ptr;
 	}
 };
-
-bool operator==(const UniquePtr& uptr1,UniquePtr& uptr2) {
-	if (uptr1._ptr == uptr2._ptr) return true;
+template<typename T>
+bool operator==(const UniquePtr<T>& uptr1, const UniquePtr<T>& uptr2) {
+	if (uptr1.get() == uptr2.get()) return true;
 	else return false;
 }
-bool operator!=(const UniquePtr& uptr1,const UniquePtr& uptr2) {
+template<typename T>
+bool operator!=(const UniquePtr<T>& uptr1,const UniquePtr<T>& uptr2) {
 	return !(uptr1==uptr2);
 }
 //bool operator<(UniquePtr& uptr1, UniquePtr& uptr2) {
