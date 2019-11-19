@@ -4,24 +4,27 @@ class UniquePtr {
 public:
 	UniquePtr() : _ptr(nullptr) {}
 	explicit UniquePtr(T* const ptr) : _ptr(ptr) {}
-	UniquePtr(const UniquePtr& uptr) = delete;
-	UniquePtr& operator =(const UniquePtr& ptr) = delete;
 	~UniquePtr() {
 		delete _ptr;
-		//this = nullptr;
+		_ptr = nullptr;
 	}
-	UniquePtr(UniquePtr&& uptr)noexcept {
-		_ptr = uptr._ptr;
+	UniquePtr(const UniquePtr& uptr) = delete;
+	UniquePtr& operator =(const UniquePtr& ptr) = delete;
+	explicit UniquePtr(UniquePtr&& uptr)noexcept :_ptr(uptr._ptr) {
 		uptr._ptr = nullptr;
 	}
-	UniquePtr& operator =(UniquePtr&& uptr)noexcept{
-		if (this != &uptr) {
-			_ptr = uptr._ptr;
-			uptr._ptr = nullptr;
-		}
+	UniquePtr& operator =(UniquePtr&& uptr)noexcept {
+		delete _ptr;
+		_ptr = uptr._ptr;
+		uptr._ptr = nullptr;
 		return *this;
 	}
-
+	explicit constexpr UniquePtr(std::nullptr_t null) : _ptr(null) {}
+	UniquePtr& operator=(std::nullptr_t null) noexcept { 
+		delete _ptr;
+		_ptr = null;
+		return *this;
+	}
 
 
 	T* release() {
@@ -29,10 +32,9 @@ public:
 		T* res;
 		res = _ptr;
 		_ptr = nullptr;
-		//*this = nullptr;
 		return res;
 	}
-	void reset(T* ptr=nullptr) {
+	void reset(const T* ptr = nullptr) {
 		if (_ptr != nullptr) {
 			delete _ptr;
 		}
@@ -46,14 +48,19 @@ public:
 	T* get()const {
 		return _ptr;
 	}
-	operator bool() {
+	//
+	explicit operator bool()const {
 		if (_ptr) return true;
 		else return false;
-	}
+	}//
+
 	T& operator*() {
 		return *_ptr;
 	}
-	T& operator->() {
+	T& operator*()const {
+		return *_ptr;
+	}
+	T* operator->()const {// почему конст
 		return _ptr;
 	}
 };
@@ -63,10 +70,41 @@ bool operator==(const UniquePtr<T>& uptr1, const UniquePtr<T>& uptr2) {
 	else return false;
 }
 template<typename T>
-bool operator!=(const UniquePtr<T>& uptr1,const UniquePtr<T>& uptr2) {
-	return !(uptr1==uptr2);
+bool operator!=(const UniquePtr<T>& uptr1, const UniquePtr<T>& uptr2) {
+	return !(uptr1 == uptr2);
 }
-//bool operator<(UniquePtr& uptr1, UniquePtr& uptr2) {
-//	if (uptr1._ptr == uptr2._ptr) return true;
-//	else return false;
-//}
+template<typename T>
+bool operator<(const UniquePtr<T>& uptr1, const UniquePtr<T>& uptr2) {
+	if (uptr1.get() < uptr2.get()) return true;
+	return false;
+}
+template<typename T>
+bool operator>(const UniquePtr<T>& uptr1, const UniquePtr<T>& uptr2) {
+	return !(uptr1 < uptr2);
+}
+template<typename T>
+bool operator<=(const UniquePtr<T>& uptr1, const UniquePtr<T>& uptr2) {
+	if (uptr1 == uptr2 || uptr1 < uptr2) return true;
+	return false;
+}
+template<typename T>
+bool operator>=(const UniquePtr<T>& uptr1, const UniquePtr<T>& uptr2) {
+	return !(uptr1 >= uptr2);
+}
+
+template<typename T>
+bool operator==(std::nullptr_t null, const UniquePtr<T>& uptr) {
+	return !uptr;
+}
+template<typename T>
+bool operator==(const UniquePtr<T>& uptr, std::nullptr_t null) {
+	return !uptr;
+}
+template<typename T>
+bool operator!=(std::nullptr_t null, const UniquePtr<T>& uptr) {
+	return (bool)uptr;
+}
+template<typename T>
+bool operator!=(const UniquePtr<T>& uptr, std::nullptr_t null) {
+	return (bool)uptr;
+}
