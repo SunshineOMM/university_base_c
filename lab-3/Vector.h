@@ -180,7 +180,7 @@ public:
 	IteratorV<Node> insert(IteratorV<Node>& iterator, const Node& node) {
 		IteratorV<Node>iter(iterator);
 		if (iterator > end() || iterator < begin()) throw"Ошибка вставки";
-		Vector res(new Node[_size + 1], _size + 1);
+		Vector res(new Node[_size + 1], (int)_size + 1);
 		IteratorV<Node> counter = begin();
 		int index = 0;
 		for(; counter != iter; ++counter)
@@ -204,7 +204,7 @@ public:
 
 	IteratorV<Node> erase(IteratorV<Node>& iterator) {
 		if (begin() == end()) throw "Ошибка удаления элемента";
-		Vector<Node> res(new Node[_size - 1], _size - 1);
+		Vector<Node> res(new Node[_size - 1], (int)_size - 1);
 		IteratorV<Node> counter=begin();
 
 		int index = 0;

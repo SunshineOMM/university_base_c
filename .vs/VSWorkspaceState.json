@@ -1,8 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\lab-3"
+    "\\lab-3",
+    "\\libutils",
+    "\\libutils\\src"
   ],
-  "SelectedNode": "\\lab-3\\Vector.h",
+  "SelectedNode": "\\libutils\\src\\Polyline.cpp",
   "PreviewInSolutionExplorer": false
 }

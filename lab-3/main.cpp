@@ -15,32 +15,28 @@
 
 template<class T> using UniquePtrType = UniquePtr<T>;
 template<class T> using SharedPtrType = SharedPtr<T>;
-template<class T> using CollectionType = List<T>;
+template<class T> using CollectionType = Vector<T>;
 
 
-void menu(int&, CollectionType<int>& collection);
-void addElement(CollectionType<int> c, const int index,  int value);
+void menu(int&,CollectionType<int>& collection, CollectionType<SharedPtrType<zigzag::Polyline>>& collectionShPtr);
+void addElement(CollectionType<int>& c, const int index, int  value);
 
-void removeElement(CollectionType<int> c, const int index);
+void removeElement(CollectionType<int>& c, const int index);
 
 void printCollection(const CollectionType<int>& c);
 
 
 int main() {
-	setlocale(LC_ALL, "RUS");
+	setlocale(LC_ALL, "RUS");	
+	CollectionType<int> collection(3);
 
-	
-	CollectionType<int> collection(5);
-
-	//CollectionType<SharedPtrType<zigzag::Polyline>> collectionShPtr(6);
+	CollectionType<SharedPtrType<zigzag::Polyline>> collectionShPtr(5);
 	//zigzag::Polyline polyline(5);
 	//SharedPtrType<zigzag::Polyline> shPtr(&polyline);
-	//SharedPtrType<zigzag::Polyline> shPtr(collectionShPtr);
-
 	auto cycle = 1;
 	while (cycle) {
 		try {
-			menu(cycle,collection);
+			menu(cycle,collection,collectionShPtr);
 		}
 		catch (char* s) {
 			std::cout << s << std::endl;
@@ -52,7 +48,7 @@ int main() {
 }
 
 
-void menu(int& cycle, CollectionType<int>& collection) {
+void menu(int& cycle, CollectionType<int>& collection, CollectionType<SharedPtrType<zigzag::Polyline>>& collectionShPtr) {
 	std::cout << "Вы находитесь в главном меню выберите одно из следующих действий:\n\t1) Печать коллекции \n\t2) Печать размера коллекции";
 	std::cout << "\n\t3) Печать первого элемента \n\t4) Печать последнего элемента \n\t5) Редактирование ";
 	std::cout << " \n\t6) Вставка элемента \n\t7) Удаление элемента \n\t8) Удаление коллекции";
@@ -79,7 +75,7 @@ void menu(int& cycle, CollectionType<int>& collection) {
 	}break;
 	case 5: {
 		if (!(collection.empty())) {
-			int index = utils::read_int("Введите индекс элемента для редактирования: ", 0, collection.size() - 1);
+			int index = (size_t)utils::read_int("Введите индекс элемента для редактирования: ", 0, (int)collection.size() - 1);
 
 			auto iterator = collection.begin();
 			for (auto i = 0; i < index; ++i)
@@ -92,11 +88,11 @@ void menu(int& cycle, CollectionType<int>& collection) {
 			throw "Ошибка, коллекция пуста";
 	}break;
 	case 6: {
-		addElement(collection, utils::read_int("Введите индекс вставки: ", 0, collection.size()), utils::read_int("Введите значение для вставки: ", -1000, 1000));
+		addElement(collection, (size_t)utils::read_int("Введите индекс вставки: ", 0, (int)collection.size()), (size_t) utils::read_int("Введите значение для вставки: ", -1000, 1000));
 	}break;
 	case 7: {
 		if (!collection.empty())
-			removeElement(collection, utils::read_int("Введите индекс для удаления элемента: ", 0, collection.size() - 1));
+			removeElement(collection, (size_t)utils::read_int("Введите индекс для удаления элемента: ", 0, (int)collection.size() - 1));
 		else
 			throw "Ошибка, коллекция пуста";
 	}break;
@@ -104,6 +100,7 @@ void menu(int& cycle, CollectionType<int>& collection) {
 		collection.clear();
 	}break;
 	case 9: {
+		
 		
 	}break;
 	case 10: {
@@ -114,7 +111,7 @@ void menu(int& cycle, CollectionType<int>& collection) {
 }
 
 
-void addElement(CollectionType<int> c, const int index, int  value) {
+void addElement(CollectionType<int>& c, const int index, int  value) {
 
 	auto iterator(c.begin());
 
@@ -130,7 +127,7 @@ void addElement(CollectionType<int> c, const int index, int  value) {
 }
 
 
-void printCollection(CollectionType<int>& c) {
+void printCollection(const CollectionType<int>& c) {
 	std::cout << "Элементы коллекции: ";
 	int i = 0;
 	for( auto it : c) {
@@ -142,7 +139,7 @@ void printCollection(CollectionType<int>& c) {
 }
 
 
-void removeElement(CollectionType<int> c, const int index) {
+void removeElement(CollectionType<int>& c, const int index) {
 	auto iterator = c.begin();
 	for (auto i = 0; i < index; ++i) {
 		++iterator;

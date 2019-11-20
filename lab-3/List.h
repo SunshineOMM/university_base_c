@@ -28,13 +28,13 @@ public:
 
 	IteratorL& operator++(int) {
 		IteratorL next(*this);
-		_node = _node._next;
-		return *next;
+		_node = _node->_next;
+		return next;
 	}
 	IteratorL& operator--(int) {
 		IteratorL prev(*this);
-		_node = _node._prev;
-		return *prev;
+		_node = _node->_prev;
+		return prev;
 
 	}
 
@@ -120,7 +120,7 @@ public:
 		Node<T>* start = _ptr;
 		auto tmp = _ptr;
 		_ptr->_prev = nullptr;
-		for (auto i = 0; i < size; ++i)
+		for (auto i = 0; i < size-1; ++i)
 		{
 			_ptr->_next = new Node<T>;
 			_ptr = _ptr->_next;
@@ -132,20 +132,7 @@ public:
 	}
 
 	~List() {
-		if (_ptr) {
-			Node<T>* tmp;
-			while (_ptr)
-			{
-				tmp = _ptr->_next;
-				delete _ptr;
-				_ptr = tmp;
-			}
-
-		}
-
-		_ptr = nullptr;
-		_size = 0;
-
+		clear();
 	}
 
 	
@@ -263,11 +250,11 @@ public:
 		return res->_data;
 	}
 
-	IteratorL<T> begin(){
+	IteratorL<T> begin()const{
 		if (!_ptr) return IteratorL<T>(nullptr);
 		return IteratorL<T>(_ptr);
 	}
-	IteratorL<T> end() {
+	IteratorL<T> end()const {
 		if (!_ptr) return IteratorL<T>(nullptr);
 		Node<T>* tmp = _ptr;
 		while (tmp != nullptr)
@@ -283,11 +270,21 @@ public:
 		return _size;
 	}
 
-	void clear() noexcept {
-		delete this;
+	void clear(){
+		if (_ptr) {
+			Node<T>* tmp;
+			while (_ptr)
+			{
+				tmp = _ptr->_next;
+				delete _ptr;
+				_ptr = tmp;
+			}
+		}
+		_ptr = nullptr;
+		_size = 0;
 	}
 
-	IteratorL<T> insert(IteratorL<T>& const iterator, T& const node) {
+	IteratorL<T> insert(IteratorL<T>&  iterator, T& const node) {
 		++_size;
 		if (!_ptr) {
 			_ptr = new Node<T>(&node);
@@ -296,23 +293,36 @@ public:
 			return _ptr;
 		}
 		else {
-			IteratorL<T> iter(begin());
 			auto res = new Node<T>(&node);
-			while (iter != end()) {
-				if (iter == iterator) {
-					Node<T>* next = &--iterator;
-					Node<T>* prev = &++iterator;
-					prev->_next = res;
-					next->_prev = res;
-					res->_prev = prev;
-					res->_next = next;
-					return IteratorL<T>(res);
-				}
-				else {
-					++iter;
-				}
+			Node<T>* f = &begin();
+			Node<T>* mem=nullptr;
+			while (f != &iterator) {	
+				if (f->_next == nullptr) mem = f;
+					f=f->_next;					
 			}
-			throw"Ошибка вствки";
+			if (f == &iterator) {	
+				Node<T>* prev = nullptr;
+				if(f) prev=f->_prev;
+					Node<T>* next = f;
+					if (next) {
+						if(!next->_prev){
+							_ptr = res;
+						}
+						next->_prev = res;
+					}
+					else{
+					
+						res->_prev = mem;
+						mem->_next = res;
+						return IteratorL<T>(res);
+					}
+					res->_next = next;
+					if(prev) prev->_next = res;
+					res->_prev = prev;
+												
+				return IteratorL<T>(res);
+			}
+			else throw"Ошибка вствки";
 		}
 	}
 
@@ -323,26 +333,23 @@ public:
 			delete _ptr;
 			return _ptr;
 		}
-		IteratorL<T> iter(begin());
-		Node<T>* tmp;
-		while (iter != iterator) {
-			if (iter == iterator) {
+		Node<T>* f = &begin();
+		while (f != &iterator) {						
+				f = f->_next;			
+		}
+		if (f == &iterator) {	
+			Node<T>* prev = nullptr;
+			Node<T>* next = nullptr;
 
-				Node<T>* next = &--iterator;
-				Node<T>* prev = &++iterator;
-				prev->_next = next;
-				next->_prev = prev;
-				return IteratorL<T>(next);
-				/*tmp = &iter->_prev;
-				auto next = &iter->_next;
-				next._prev = tmp;
-				tmp._next = next;
-				IteratorL<T> res(&next);
-				return res;*/
-			}
-			else {
-				++iter;
-			}
+				if(f->_next) next = f->_next;				 
+				if (f->_prev) prev = f->_prev;
+				else _ptr = next;
+				 
+				if (prev) prev->_next = next;
+				if (next) next->_prev = prev;
+
+				delete f;
+			return IteratorL<T>(next);
 		}
 		throw"Ошибка удаления элемента";
 	}

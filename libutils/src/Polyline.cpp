@@ -14,17 +14,17 @@ namespace  zigzag {
 	}
 	Polyline::Polyline(const int num) : _head(new Point[num]), _number(num), _lenghtCache(-1) {
 		if (num <= 0) throw "Ошибка, некорректное количество вершин";
-		extern bool trace;
+		//extern bool trace;
 		for (int i = 0; i < num; ++i) {
 			_head[i] = Point(rand() % 100, rand() % 100);
 		}
-		if (trace) std::cout << "\tКонструктор с параметром\n";
+		//if (trace) std::cout << "\tКонструктор с параметром\n";
 	}
 	Polyline::~Polyline() {
-		extern bool trace;
+		//extern bool trace;
 		delete[] _head;
 		_head = nullptr;
-		if (trace) std::cout << "\tДеструктор\n";
+		//if (trace) std::cout << "\tДеструктор\n";
 	}
 	Polyline& Polyline::operator =(const Polyline& line) {
 		extern bool trace;
