@@ -2,8 +2,8 @@ template<typename T>
 class UniquePtr {
 	T* _ptr;
 public:
-	UniquePtr() : _ptr(nullptr) {}
-	explicit UniquePtr(T* const ptr) : _ptr(ptr) {}
+	explicit UniquePtr()noexcept : _ptr(nullptr) {}
+	explicit UniquePtr(T* const ptr)noexcept : _ptr(ptr) {}
 	~UniquePtr() {
 		delete _ptr;
 		_ptr = nullptr;
@@ -19,8 +19,8 @@ public:
 		uptr._ptr = nullptr;
 		return *this;
 	}
-	explicit constexpr UniquePtr(std::nullptr_t null) : _ptr(null) {}
-	UniquePtr& operator=(std::nullptr_t null) noexcept { 
+	explicit constexpr UniquePtr(std::nullptr_t null)noexcept : _ptr(null) {}
+	UniquePtr& operator=(std::nullptr_t null) noexcept {
 		delete _ptr;
 		_ptr = null;
 		return *this;
@@ -48,11 +48,11 @@ public:
 	T* get()const {
 		return _ptr;
 	}
-	//
+
 	explicit operator bool()const {
 		if (_ptr) return true;
 		else return false;
-	}//
+	}
 
 	T& operator*() {
 		return *_ptr;
@@ -60,51 +60,54 @@ public:
 	T& operator*()const {
 		return *_ptr;
 	}
-	T* operator->()const {// почему конст
+	T* operator->() {
+		return _ptr;
+	}
+	T* operator->()const {
 		return _ptr;
 	}
 };
 template<typename T>
-bool operator==(const UniquePtr<T>& uptr1, const UniquePtr<T>& uptr2) {
+bool operator==(const UniquePtr<T>& uptr1, const UniquePtr<T>& uptr2)noexcept {
 	if (uptr1.get() == uptr2.get()) return true;
 	else return false;
 }
 template<typename T>
-bool operator!=(const UniquePtr<T>& uptr1, const UniquePtr<T>& uptr2) {
+bool operator!=(const UniquePtr<T>& uptr1, const UniquePtr<T>& uptr2)noexcept {
 	return !(uptr1 == uptr2);
 }
 template<typename T>
-bool operator<(const UniquePtr<T>& uptr1, const UniquePtr<T>& uptr2) {
+bool operator<(const UniquePtr<T>& uptr1, const UniquePtr<T>& uptr2)noexcept {
 	if (uptr1.get() < uptr2.get()) return true;
 	return false;
 }
 template<typename T>
-bool operator>(const UniquePtr<T>& uptr1, const UniquePtr<T>& uptr2) {
+bool operator>(const UniquePtr<T>& uptr1, const UniquePtr<T>& uptr2)noexcept {
 	return !(uptr1 < uptr2);
 }
 template<typename T>
-bool operator<=(const UniquePtr<T>& uptr1, const UniquePtr<T>& uptr2) {
+bool operator<=(const UniquePtr<T>& uptr1, const UniquePtr<T>& uptr2)noexcept {
 	if (uptr1 == uptr2 || uptr1 < uptr2) return true;
 	return false;
 }
 template<typename T>
-bool operator>=(const UniquePtr<T>& uptr1, const UniquePtr<T>& uptr2) {
+bool operator>=(const UniquePtr<T>& uptr1, const UniquePtr<T>& uptr2)noexcept {
 	return !(uptr1 >= uptr2);
 }
 
 template<typename T>
-bool operator==(std::nullptr_t null, const UniquePtr<T>& uptr) {
+bool operator==(std::nullptr_t null, const UniquePtr<T>& uptr)noexcept {
 	return !uptr;
 }
 template<typename T>
-bool operator==(const UniquePtr<T>& uptr, std::nullptr_t null) {
+bool operator==(const UniquePtr<T>& uptr, std::nullptr_t null)noexcept {
 	return !uptr;
 }
 template<typename T>
-bool operator!=(std::nullptr_t null, const UniquePtr<T>& uptr) {
+bool operator!=(std::nullptr_t null, const UniquePtr<T>& uptr)noexcept {
 	return (bool)uptr;
 }
 template<typename T>
-bool operator!=(const UniquePtr<T>& uptr, std::nullptr_t null) {
+bool operator!=(const UniquePtr<T>& uptr, std::nullptr_t null)noexcept {
 	return (bool)uptr;
 }

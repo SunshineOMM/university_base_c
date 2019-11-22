@@ -18,23 +18,22 @@ template<class T> using SharedPtrType = SharedPtr<T>;
 template<class T> using CollectionType = Vector<T>;
 
 template <typename T>
-void menu(int&,CollectionType<T>& collection, CollectionType<SharedPtrType<zigzag::Polyline>>& collectionShPtr, SharedPtrType<zigzag::Polyline>& shPtr);
+void menu(int&, CollectionType<T>& collection, CollectionType<SharedPtrType<zigzag::Polyline>>& collectionShPtr, SharedPtrType<zigzag::Polyline>& shPtr);
 
 template <typename T>
-void addElement(CollectionType<T>& c, const int index,const T&  value);
+void addElement(CollectionType<T>& c, const int index, const T&  value);
 
 template <typename T>
 void removeElement(CollectionType<T>& c, const int index);
 
 template <typename T>
-void printCollection(const CollectionType<T>& c);
+void printCollection( CollectionType<T>& c);
 
 
 int main() {
-	setlocale(LC_ALL, "RUS");	
+	setlocale(LC_ALL, "RUS");
 	CollectionType<int> collection(3);
 
-	//CollectionType<SharedPtrType<zigzag::Polyline>> collectionShPtr(2);
 	zigzag::Polyline polyline(5);
 	SharedPtrType<zigzag::Polyline> shPtr(&polyline);
 	CollectionType<SharedPtrType<zigzag::Polyline>> collectionShPtr;
@@ -42,7 +41,7 @@ int main() {
 	auto cycle = 1;
 	while (cycle) {
 		try {
-			menu(cycle,collection,collectionShPtr,shPtr);
+			menu(cycle, collection, collectionShPtr, shPtr);
 		}
 		catch (char* s) {
 			std::cout << s << std::endl;
@@ -74,10 +73,10 @@ void menu(int& cycle, CollectionType<T>& collection, CollectionType<SharedPtrTyp
 			throw "Ошибка, коллекция пуста";
 	}break;
 	case 4: {
-		if(!(collection.empty()))
+		if (!(collection.empty()))
 			std::cout << "Последний элемент коллекции: " << collection.back() << std::endl;
-				else
-				throw "Ошибка, коллекция пуста";
+		else
+			throw "Ошибка, коллекция пуста";
 	}break;
 	case 5: {
 		if (!(collection.empty())) {
@@ -94,7 +93,6 @@ void menu(int& cycle, CollectionType<T>& collection, CollectionType<SharedPtrTyp
 			throw "Ошибка, коллекция пуста";
 	}break;
 	case 6: {
-		// Убрать -1
 		addElement(collection, (size_t)utils::read_int("Введите индекс вставки: ", 0, (int)collection.size()), utils::read_int("Введите значение для вставки: ", -1000, 1000));
 	}break;
 	case 7: {
@@ -107,9 +105,8 @@ void menu(int& cycle, CollectionType<T>& collection, CollectionType<SharedPtrTyp
 		collection.clear();
 	}break;
 	case 9: {
-		// Убрать -1
 		addElement(collectionShPtr, (int)collectionShPtr.size(), shPtr);
-		
+
 	}break;
 	case 10: {
 		cycle = 0;
@@ -135,10 +132,10 @@ void addElement(CollectionType<T>& c, const int index, const T&  value) {
 }
 
 template <typename T>
-void printCollection(const CollectionType<T>& c) {
+void printCollection( CollectionType<T>& c) {
 	std::cout << "Элементы коллекции: ";
 	int i = 0;
-	for( auto it : c) {
+	for (auto it : c) {
 		std::cout << "[" << i << "]" << " " << it << " ";
 		++it;
 		++i;

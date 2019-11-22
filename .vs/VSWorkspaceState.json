@@ -3,9 +3,8 @@
     "",
     "\\lab-3",
     "\\libutils",
-    "\\libutils\\include",
-    "\\libutils\\include\\libutils"
+    "\\libutils\\include"
   ],
-  "SelectedNode": "\\lab-3\\Vector.h",
+  "SelectedNode": "\\lab-3\\main.cpp",
   "PreviewInSolutionExplorer": false
 }
