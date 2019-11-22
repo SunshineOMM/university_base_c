@@ -9,8 +9,8 @@
 #include <iostream>
 namespace  zigzag {
 	Polyline::Polyline() :_head(nullptr), _number(0), _lenghtCache(-1) {
-		extern bool trace;
-		if (trace) std::cout << "\tКонструктор по умолчанию\n";
+		/*extern bool trace;
+		if (trace) std::cout << "\tКонструктор по умолчанию\n";*/
 	}
 	Polyline::Polyline(const int num) : _head(new Point[num]), _number(num), _lenghtCache(-1) {
 		if (num <= 0) throw "Ошибка, некорректное количество вершин";
@@ -21,10 +21,10 @@ namespace  zigzag {
 		//if (trace) std::cout << "\tКонструктор с параметром\n";
 	}
 	Polyline::~Polyline() {
-		//extern bool trace;
+	//	//extern bool trace;
 		delete[] _head;
 		_head = nullptr;
-		//if (trace) std::cout << "\tДеструктор\n";
+	//	//if (trace) std::cout << "\tДеструктор\n";
 	}
 	Polyline& Polyline::operator =(const Polyline& line) {
 		extern bool trace;
@@ -35,7 +35,7 @@ namespace  zigzag {
 			_head[i] = line[i];
 		}
 		_lenghtCache = line._lenghtCache;
-		if (trace) std::cout << "\tОператор присваивания копированием\n";
+		/*if (trace) std::cout << "\tОператор присваивания копированием\n";*/
 		return *this;
 	}
 	Polyline::Polyline(const Polyline& line) :_head(new Point[line._number]), _number(line._number), _lenghtCache(line._lenghtCache) {
@@ -43,13 +43,13 @@ namespace  zigzag {
 		for (int i = 0; i < line._number; ++i) {
 			_head[i] = line._head[i];
 		}
-		if (trace) std::cout << "\tКонструктор копирования\n";
+		/*if (trace) std::cout << "\tКонструктор копирования\n";*/
 	}
 	Polyline::Polyline(Polyline&& tLine) noexcept :_head(tLine._head), _number(tLine._number), _lenghtCache(-1) {
 		extern bool trace;
 		tLine._head = nullptr;
 		tLine._number = 0;
-		if (trace) std::cout << "\tКонструктор перемещения\n";
+		/*if (trace) std::cout << "\tКонструктор перемещения\n";*/
 	}
 	Polyline& Polyline::operator=(Polyline&& tLine)noexcept {
 		extern bool trace;
@@ -59,7 +59,7 @@ namespace  zigzag {
 		_lenghtCache = -1;
 		tLine._head = nullptr;
 		tLine._number = 0;
-		if (trace) std::cout << "\tОператор присваивания перемещением\n";
+		/*if (trace) std::cout << "\tОператор присваивания перемещением\n";*/
 		return *this;
 	}
 

@@ -82,9 +82,7 @@ public:
 	}
 
 	~Vector() {
-		delete _ptr;
-		_ptr = nullptr;
-		_size = 0;
+		clear();
 	}
 
 	Vector(const Vector<Node>& vector) :_ptr(new Node[vector._size]), _size(vector._size) {
@@ -171,16 +169,20 @@ public:
 
 
 
-	void clear()noexcept {
-		delete _ptr;
+	void clear() noexcept {
+		delete[] _ptr;
 		_ptr = nullptr;
 		_size = 0;
 	}
 
 	IteratorV<Node> insert(IteratorV<Node>& iterator, const Node& node) {
+		if (iterator == nullptr&&this == nullptr)
+		{
+
+		}
 		IteratorV<Node>iter(iterator);
 		if (iterator > end() || iterator < begin()) throw"Ошибка вставки";
-		Vector res(new Node[_size + 1], (int)_size + 1);
+		Vector res(new Node[_size + 1] , (int)_size + 1);
 		IteratorV<Node> counter = begin();
 		int index = 0;
 		for(; counter != iter; ++counter)

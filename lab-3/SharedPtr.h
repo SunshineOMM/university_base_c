@@ -8,14 +8,13 @@ public:
 	explicit SharedPtr(T * const ptr) :_ptr(ptr), _num(new size_t(1)) {}
 	~SharedPtr() {
 		if (*_num == 1&&_ptr) {
-			delete _ptr;
 			delete _num;
 		}
-		*_num--;
+		(*_num)--;
 		_ptr = nullptr;
 	}
 	SharedPtr(const SharedPtr& sptr) :_ptr(sptr._ptr), _num(sptr._num) {
-		*_num++;
+		(*_num)++;
 	}
 	SharedPtr& operator=(const SharedPtr& sptr) {
 		if (*_num) {
@@ -23,7 +22,7 @@ public:
 		}
 		_ptr = sptr._ptr;
 		_num = sptr._num;
-		*_num++;
+		(*_num)++;
 		return *this;
 	}
 	explicit SharedPtr(SharedPtr&& sptr)  noexcept :_ptr(sptr._ptr), _num(sptr._num) {

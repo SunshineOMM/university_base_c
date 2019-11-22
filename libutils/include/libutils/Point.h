@@ -10,6 +10,7 @@ namespace zigzag {
 	public:
 		Point();
 		Point(double x, double  y);
+		//~Point();
 
 		void setX(double x);
 		void setY(double y);

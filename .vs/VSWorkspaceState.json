@@ -3,8 +3,9 @@
     "",
     "\\lab-3",
     "\\libutils",
-    "\\libutils\\src"
+    "\\libutils\\include",
+    "\\libutils\\include\\libutils"
   ],
-  "SelectedNode": "\\libutils\\src\\Polyline.cpp",
+  "SelectedNode": "\\lab-3\\Vector.h",
   "PreviewInSolutionExplorer": false
 }
