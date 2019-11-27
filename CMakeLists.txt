@@ -14,4 +14,5 @@ add_subdirectory(libutils)
 add_subdirectory(lab-1)
 add_subdirectory(lab-2)
 add_subdirectory(lab-3)
+add_subdirectory(lab-4)
 

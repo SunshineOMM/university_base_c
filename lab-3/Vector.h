@@ -39,7 +39,7 @@ public:
 		return _node != iterator._node;
 	}
 	bool operator==(std::nullptr_t null)noexcept {
-		return _node == nullptr;
+		return _node == null;
 	}
 	bool operator!=(std::nullptr_t null)noexcept {
 		return !(this == nullptr);

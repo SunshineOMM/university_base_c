@@ -143,7 +143,6 @@ public:
 		clear();
 	}
 
-
 	explicit List<T>(List& oldList) : _size(oldList._size)noexcept {
 		IteratorL<T> iterator = oldList.begin();
 
@@ -186,7 +185,6 @@ public:
 
 	}
 
-
 	List<T>& operator=(const List<T>& list) {
 		if (this == list) {
 			return *this;
@@ -225,12 +223,10 @@ public:
 		return *this;
 	}
 
-
 	explicit List<T>(List<T>&& oldList) noexcept : _ptr(&(oldList.begin())), _size(oldList._size) {
 		oldList._ptr = nullptr;
 		oldList._size = 0;
 	}
-
 
 	List<T>& operator=(List<T>&& list)noexcept {
 		if (*this == list)

@@ -1,10 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\lab-3",
-    "\\libutils",
-    "\\libutils\\include"
+    "\\lab-4"
   ],
-  "SelectedNode": "\\lab-3\\main.cpp",
+  "SelectedNode": "\\lab-4\\CMakeLists.txt",
   "PreviewInSolutionExplorer": false
 }
